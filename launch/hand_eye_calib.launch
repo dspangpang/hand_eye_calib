@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<launch>
+
+    <node pkg="hand_eye_calib" type="eye_in_hand_calib_node" name="eye_in_hand_calib_node" output="screen" />
+
+</launch>
