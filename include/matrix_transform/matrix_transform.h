@@ -13,6 +13,9 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/calib3d.hpp>
 
+#include <Eigen/Geometry>
+#include <opencv4/opencv2/core/eigen.hpp>
+
 
 
 namespace matrix_transform {
@@ -65,6 +68,10 @@ namespace matrix_transform {
      */
     cv::Mat attitude_vector_to_Matrix(cv::Mat& m, bool is_quaternion, const std::string& seq);
 
+    /**
+     * @brief 变换矩阵->xyz + 四元数(wxyz)
+    */
+    void rotation_matrix_to_quaternion(cv::Mat& m);
 }
 
 

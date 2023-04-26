@@ -162,6 +162,8 @@ int HandEyeCalib::result_test(int calib_type) {
             cv::Mat worldPos = vecH_gripper2base[i] * H_cam2gripper * vecH_target2cam[i] * cheesePos;
             std::cout << i + 1 << ": " << worldPos.t() << std::endl;
         }
+        std::cout << "手眼标定结果：" << H_cam2gripper << std::endl;
+        matrix_transform::rotation_matrix_to_quaternion(R_cam2gripper);
     }
     if (calib_type == EYE_TO_HAND){
         //用第一组和第二组进行对比验证

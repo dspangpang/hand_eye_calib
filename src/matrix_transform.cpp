@@ -94,6 +94,22 @@ cv::Mat matrix_transform::quaternion_to_rotated_matrix(const cv::Vec4d &q) {
     return cv::Mat(res);
 }
 
+void matrix_transform::rotation_matrix_to_quaternion(cv::Mat& m)
+{
+    Eigen::Matrix3d R_camera2gripper=Eigen::Matrix3d::Identity();
+    cv::cv2eigen(m,R_camera2gripper);
+    Eigen::Quaterniond Q(R_camera2gripper);
+    std::cout << "旋转矩阵：" << m << std::endl;
+    
+    std::cout << "四元数：" << Q.w() << ","
+                            << Q.x() << ","
+                            << Q.y() << ","
+                            << Q.z() << std::endl;
+    // 提取旋转部分
+    // Eigen::Matrix3d R_camera2gripper = T_camera2gripper.block<3,3>(0, 0);
+    
+}
+
 cv::Mat matrix_transform::attitude_vector_to_Matrix(cv::Mat &m, bool is_quaternion, const std::string &seq) {
     CV_Assert(m.total() == 6 || m.total() == 10 || m.total() == 7);
     if (m.cols == 1)
