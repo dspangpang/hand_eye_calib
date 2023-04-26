@@ -14,7 +14,7 @@
 #include <opencv2/calib3d.hpp>
 
 #include <Eigen/Geometry>
-#include <opencv4/opencv2/core/eigen.hpp>
+#include <opencv2/core/eigen.hpp>
 
 
 
@@ -71,7 +71,7 @@ namespace matrix_transform {
     /**
      * @brief 变换矩阵->xyz + 四元数(wxyz)
     */
-    void rotation_matrix_to_quaternion(cv::Mat& m);
+    void rotated_matrix_to_quaternion(cv::Mat& m);
 }
 
 

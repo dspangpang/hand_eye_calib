@@ -94,7 +94,7 @@ cv::Mat matrix_transform::quaternion_to_rotated_matrix(const cv::Vec4d &q) {
     return cv::Mat(res);
 }
 
-void matrix_transform::rotation_matrix_to_quaternion(cv::Mat& m)
+void matrix_transform::rotated_matrix_to_quaternion(cv::Mat& m)
 {
     Eigen::Matrix3d R_camera2gripper=Eigen::Matrix3d::Identity();
     cv::cv2eigen(m,R_camera2gripper);
