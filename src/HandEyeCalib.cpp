@@ -151,11 +151,16 @@ int HandEyeCalib::result_test(int calib_type) {
         std::cout << vecH_target2cam[1] << std::endl;
         std::cout << "手眼系统反演的位姿为：" << std::endl;
         //用手眼系统预测第一组数据中标定板相对相机的位姿，是否与vecH_target2cam[1]相同
-        std::cout << H_cam2gripper.inv()* vecH_gripper2base[1].inv() * vecH_gripper2base[0]
-                     * H_cam2gripper * vecH_target2cam[0] << std::endl << std::endl;
+        cv::Mat H_target2cam_ = H_cam2gripper.inv()* vecH_gripper2base[1].inv() * vecH_gripper2base[0]
+                     * H_cam2gripper * vecH_target2cam[0];
+        std::cout << H_target2cam_ << std::endl << std::endl;
+        // 误差
+        std::cout << "误差：" << std::endl;
+        cv::Mat H_error = cv::abs(vecH_target2cam[1] - H_target2cam_);
+        std::cout << H_error << std::endl << std::endl;
 
         std::cout << "----手眼系统测试----" << std::endl;
-        std::cout << "机械臂下标定板XYZ为：" << std::endl;
+        std::cout << "机械臂下标定板XYZ为:" << std::endl;
         for (int i = 0; i < vecH_target2cam.size(); ++i)
         {
             cv::Mat cheesePos{ 0.0,0.0,0.0,1.0 };//4*1矩阵，单独求机械臂下，标定板的xyz
@@ -175,11 +180,17 @@ int HandEyeCalib::result_test(int calib_type) {
         std::cout << vecH_target2cam[1] << std::endl;
         std::cout << "手眼系统反演的位姿为：" << std::endl;
         //用手眼系统预测第一组数据中标定板相对相机的位姿，是否与vecHc[1]相同
-        std::cout << H_cam2gripper.inv()* vecH_gripper2base[1].inv() * vecH_gripper2base[0]
-                     * H_cam2gripper * vecH_target2cam[0] << std::endl << std::endl;
+        cv::Mat H_target2cam_ = H_cam2gripper.inv()* vecH_gripper2base[1].inv() * vecH_gripper2base[0]
+                     * H_cam2gripper * vecH_target2cam[0];
+        std::cout << H_target2cam_ << std::endl << std::endl;
+        std::cout << H_target2cam_ << std::endl << std::endl;
+        // 误差
+        std::cout << "误差：" << std::endl;
+        cv::Mat H_error = cv::abs(vecH_target2cam[1] - H_target2cam_);
+        std::cout << H_error << std::endl << std::endl;
 
         std::cout << "----手眼系统测试----" << std::endl;
-        std::cout << "机械臂下标定板XYZ为：" << std::endl;
+        std::cout << "机械臂下标定板XYZ为:" << std::endl;
         for (int i = 0; i < vecH_target2cam.size(); ++i)
         {
             cv::Mat cheesePos{ 0.0,0.0,0.0,1.0 };//4*1矩阵，单独求机械臂下，标定板的xyz
