@@ -11,6 +11,7 @@ project(hand_eye_calib)
 # ros 安装路径
 list(APPEND CMAKE_PREFIX_PATH /opt/ros/noetic/)
 find_package(OpenCV REQUIRED)
+find_package(Eigen3 REQUIRED)
 find_package(catkin REQUIRED COMPONENTS
         roscpp
         roslib
@@ -119,11 +120,12 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-include_directories("/usr/include/eigen3")
+
 include_directories(
         # include
         ${catkin_INCLUDE_DIRS}
         ${OpenCV_INCLUDE_DIRS}
+        ${EIGEN3_INCLUDE_DIR}
 )
 
 ## Declare a C++ library
