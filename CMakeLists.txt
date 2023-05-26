@@ -17,6 +17,7 @@ find_package(catkin REQUIRED COMPONENTS
         roslib
         rospy
         std_msgs
+        tf2_ros
         )
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -152,6 +153,14 @@ add_executable(eye_to_hand_calib_node
         src/matrix_transform.cpp
         src/INIParser.cpp
         src/HandEyeCalib.cpp)
+
+add_executable(pub_hand_eye_frame_node
+        nodes/pub_hand_eye_frame_node.cpp
+        src/matrix_transform.cpp
+        src/INIParser.cpp
+        src/HandEyeCalib.cpp)
+
+        
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
 ## target back to the shorter version for ease of user use
@@ -169,6 +178,11 @@ target_link_libraries(eye_in_hand_calib_node
         )
 
 target_link_libraries(eye_to_hand_calib_node
+        ${catkin_LIBRARIES}
+        ${OpenCV_LIBRARIES}
+        )
+
+target_link_libraries(pub_hand_eye_frame_node
         ${catkin_LIBRARIES}
         ${OpenCV_LIBRARIES}
         )

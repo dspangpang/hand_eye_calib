@@ -6,11 +6,10 @@
 
 HandEyeCalib::HandEyeCalib() {
     is_quaternion = false;
+    is_picture = false;
 }
 
 HandEyeCalib::~HandEyeCalib() = default;
-
-
 
 std::string HandEyeCalib::get_INI_data(const std::string &path,
                                        const std::string &root,
@@ -48,15 +47,22 @@ void HandEyeCalib::get_data(const std::string &INI_dir) {
     std::string key_gripper = "gripperPoseData";
     std::string key_image_num = "imagesNum";
     std::string pose_format = "poseFormat";
+    std::string cal_info = "isPicture";
 
     auto cal_pose_path = get_INI_data(INI_dir + "/Setting.ini", root, key_cal);
     auto gripper_pose_path = get_INI_data(INI_dir + "/Setting.ini", root, key_gripper);
     auto image_num = get_INI_data(INI_dir + "/Setting.ini", root, key_image_num);
     auto arm_format = get_INI_data(INI_dir + "/Setting.ini", root, pose_format);
+    auto is_use_picture = get_INI_data(INI_dir + "/Setting.ini", root, cal_info);
 
     if(arm_format == "quaternion"){
         is_quaternion = true;
     }
+
+    if(is_use_picture == "true"){
+        is_picture = true;
+    }
+
     std::cout << "pose format :" << arm_format << std::endl;
 
     num_images = std::stoi(image_num);
@@ -202,6 +208,28 @@ int HandEyeCalib::result_test(int calib_type) {
     return 0;
 }
 
+std::vector<double> HandEyeCalib::get_cal_pnp_data(const std::string &path){
+    
+    std::string fileName;
+    std::vector<double> out;
+    for (int i = 0; i < num_images; i++) {
+        fileName = path + "/img/" + std::to_string(i) + ".bmp";
+        auto img = cv::imread(fileName, cv::IMREAD_UNCHANGED);
+        std::vector<cv::Point2d> img_point;
+
+        auto found = cv::findChessboardCornersSB(img, cv::Size(17, 15), img_point,
+			cv::CALIB_CB_EXHAUSTIVE | cv::CALIB_CB_ACCURACY);
+
+        if (found) {
+			cv::drawChessboardCorners(img, cv::Size(17, 15), cv::Mat(img_point), found);
+            cv::namedWindow("image", cv::WINDOW_NORMAL);
+		    cv::imshow("image", img);
+		    auto key = cv::waitKey();
+        }
+
+    }
+
+}
 
 template<typename Tp>
 cv::Mat HandEyeCalib::convertVector2Mat(std::vector<Tp> v, int channels, int rows) {

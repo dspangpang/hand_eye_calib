@@ -44,8 +44,12 @@ public:
     cv::Mat_<double> ToolPose;
     // 存储图片的数量
     size_t num_images;
-    // 是否是四元数
+
+    // 是否使用四元数
     bool is_quaternion;
+
+    // 是否是使用图片进行手眼标定
+    bool is_picture;
 
     int hand_eye_calib(const std::string &INI_dir, int calib_type);
     int result_test(int calib_type);
@@ -63,6 +67,14 @@ private:
                              const std::string &key);
 
     std::vector<double> get_TXT_data(const std::string &path);
+
+    /*!
+     * @brief 从标定板图片中获得计算pnp获取位姿信息
+     * @tparam _Tp
+     * @param mat
+     * @return
+     */
+    std::vector<double> get_cal_pnp_data(const std::string &path);
 
 
     /*!
