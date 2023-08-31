@@ -1,10 +1,6 @@
-//
-// Created by jzz on 23-2-4.
-//
+#include "../include/hand_eye_calib/matrix_transform.h"
 
-#include "../include/matrix_transform/matrix_transform.h"
-
-cv::Mat matrix_transform::r_t2rt(cv::Mat &R, cv::Mat &T) {
+cv::Mat r_t2rt(cv::Mat &R, cv::Mat &T){
     cv::Mat RT;
     cv::Mat_<double> R1 = (cv::Mat_<double>(4, 3) <<
             R.at<double>(0, 0), R.at<double>(0, 1), R.at<double>(0, 2),
@@ -23,14 +19,16 @@ cv::Mat matrix_transform::r_t2rt(cv::Mat &R, cv::Mat &T) {
     return RT;
 }
 
-void matrix_transform::rt2r_t(cv::Mat &RT, cv::Mat &R, cv::Mat &T) {
+
+void rt2r_t(cv::Mat &RT, cv::Mat &R, cv::Mat &T){
     cv::Rect R_rect(0, 0, 3, 3);
     cv::Rect T_rect(3, 0, 1, 3);
     R = RT(R_rect);
     T = RT(T_rect);
 }
 
-bool matrix_transform::is_rotation_matrix(const cv::Mat &R) {
+
+bool is_rotation_matrix(const cv::Mat & R){
     cv::Mat tmp33 = R({ 0,0,3,3 });
     cv::Mat is_identity;
 
@@ -41,8 +39,9 @@ bool matrix_transform::is_rotation_matrix(const cv::Mat &R) {
     return  cv::norm(I, is_identity) < 1e-6;
 }
 
-cv::Mat matrix_transform::euler_angle_to_rotated_matrix(const cv::Mat &euler_angle, const std::string &seq) {
-    CV_Assert(euler_angle.rows == 1 && euler_angle.cols == 3);
+
+cv::Mat euler_angle_to_rotated_matrix(const cv::Mat& euler_angle, const std::string& seq){
+        CV_Assert(euler_angle.rows == 1 && euler_angle.cols == 3);
 
     euler_angle /= 180 / CV_PI;
     cv::Matx13d m(euler_angle);
@@ -73,13 +72,12 @@ cv::Mat matrix_transform::euler_angle_to_rotated_matrix(const cv::Mat &euler_ang
                   __FUNCTION__, __FILE__, __LINE__);
     }
 
-//    std::cout << is_rotation_matrix(rotMat) << std::endl;
-
     return rotMat;
-
 }
 
-cv::Mat matrix_transform::quaternion_to_rotated_matrix(const cv::Vec4d &q) {
+
+cv::Mat quaternion_to_rotated_matrix(const cv::Vec4d& q){
+    
     double w = q[0], x = q[1], y = q[2], z = q[3];
 
     double x2 = x * x, y2 = y * y, z2 = z * z;
@@ -94,23 +92,8 @@ cv::Mat matrix_transform::quaternion_to_rotated_matrix(const cv::Vec4d &q) {
     return cv::Mat(res);
 }
 
-void matrix_transform::rotated_matrix_to_quaternion(cv::Mat& m)
-{
-    Eigen::Matrix3d R_camera2gripper=Eigen::Matrix3d::Identity();
-    cv::cv2eigen(m,R_camera2gripper);
-    Eigen::Quaterniond Q(R_camera2gripper);
-    std::cout << "旋转矩阵：" << m << std::endl;
-    
-    std::cout << "四元数：" << Q.w() << ","
-                            << Q.x() << ","
-                            << Q.y() << ","
-                            << Q.z() << std::endl;
-    // 提取旋转部分
-    // Eigen::Matrix3d R_camera2gripper = T_camera2gripper.block<3,3>(0, 0);
-    
-}
 
-cv::Mat matrix_transform::attitude_vector_to_Matrix(cv::Mat &m, bool is_quaternion, const std::string &seq) {
+cv::Mat attitude_vector_to_Matrix(cv::Mat& m, bool is_quaternion, const std::string& seq){
     CV_Assert(m.total() == 6 || m.total() == 10 || m.total() == 7);
     if (m.cols == 1)
         m = m.t();

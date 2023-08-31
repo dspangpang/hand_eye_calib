@@ -2,23 +2,23 @@ cmake_minimum_required(VERSION 3.0.2)
 project(hand_eye_calib)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+add_compile_options(-std=c++11)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 
 # ros 安装路径
-list(APPEND CMAKE_PREFIX_PATH /opt/ros/noetic/)
 find_package(OpenCV REQUIRED)
 find_package(Eigen3 REQUIRED)
+find_package(jsoncpp REQUIRED)
 find_package(catkin REQUIRED COMPONENTS
-        roscpp
-        roslib
-        rospy
-        std_msgs
-        tf2_ros
-        )
+    roscpp
+    roslib
+    rospy
+    std_msgs
+    tf2_ros
+ )
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -127,6 +127,7 @@ include_directories(
         ${catkin_INCLUDE_DIRS}
         ${OpenCV_INCLUDE_DIRS}
         ${EIGEN3_INCLUDE_DIR}
+        ${JSONCPP_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library
@@ -142,23 +143,15 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-add_executable(eye_in_hand_calib_node
-        nodes/eye_in_hand_calib_node.cpp
-        src/matrix_transform.cpp
-        src/INIParser.cpp
-        src/HandEyeCalib.cpp)
-
-add_executable(eye_to_hand_calib_node
-        nodes/eye_to_hand_calib_node.cpp
-        src/matrix_transform.cpp
-        src/INIParser.cpp
-        src/HandEyeCalib.cpp)
+add_executable(hand_eye_calib_node
+        nodes/hand_eye_calib_node.cpp
+        src/HandEyeCalib.cpp
+        src/jsonParser.cpp
+        src/matrix_transform.cpp)
 
 add_executable(pub_hand_eye_frame_node
         nodes/pub_hand_eye_frame_node.cpp
-        src/matrix_transform.cpp
-        src/INIParser.cpp
-        src/HandEyeCalib.cpp)
+        src/jsonParser.cpp)
 
         
 ## Rename C++ executable without prefix
@@ -172,19 +165,16 @@ add_executable(pub_hand_eye_frame_node
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(eye_in_hand_calib_node
+target_link_libraries(hand_eye_calib_node
         ${catkin_LIBRARIES}
         ${OpenCV_LIBRARIES}
-        )
-
-target_link_libraries(eye_to_hand_calib_node
-        ${catkin_LIBRARIES}
-        ${OpenCV_LIBRARIES}
+        jsoncpp_lib
         )
 
 target_link_libraries(pub_hand_eye_frame_node
         ${catkin_LIBRARIES}
         ${OpenCV_LIBRARIES}
+        jsoncpp_lib
         )
 
 #############

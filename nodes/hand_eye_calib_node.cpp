@@ -10,9 +10,8 @@ int main(int argc, char** argv){
 
     auto config_dir = ros::package::getPath("hand_eye_calib") + "/config";
 
-    HandEyeCalib hec;
-    hec.hand_eye_calib(config_dir, EYE_TO_HAND);
-    hec.result_test(EYE_TO_HAND);
+    HandEyeCalib hec(config_dir);
+    hec.run();
 
     return 0;
 

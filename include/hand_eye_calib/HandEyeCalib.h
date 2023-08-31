@@ -5,22 +5,49 @@
 #ifndef HAND_EYE_CALIB_HANDEYECALIB_H
 #define HAND_EYE_CALIB_HANDEYECALIB_H
 
-#include "ros/ros.h"
-#include <ros/package.h>
-#include "iostream"
-#include "../matrix_transform/matrix_transform.h"
-#include "../ini_parser/INIParser.h"
-#include "vector"
+#include <iostream>
+#include <vector>
+#include <fstream>
 
-#define EYE_IN_HAND 0
-#define EYE_TO_HAND 1
+#include <ros/ros.h>
+#include <ros/package.h>
+
+#include <Eigen/Dense>
+#include <Eigen/Core>
+
+#include <opencv2/opencv.hpp>
+#include <opencv2/core/eigen.hpp>
+
+
+#include "./jsonParser.h"
+#include "./matrix_transform.h"
 
 class HandEyeCalib {
+private:
+    // calib 配置文件信息
+    std::string calibrationMethod;
+    int imagesNum;
+    std::string dataDectory;
+    std::string armPoseFormat;
+    std::string calPoseDataFile;
+    std::string gripperPoseDataFile;
+    bool usePicture;
+    std::string imageDataDectory;
 
+    std::string config_path;
+    std::string calPosePath;
+    std::string gripperPosePath;
+    std::string jsonPath;
 public:
-    HandEyeCalib();
+    HandEyeCalib(const std::string &config_path);
     ~HandEyeCalib();
-    //定义手眼标定矩阵计算相关参数
+    
+    int run();
+private:
+
+    // 定义手眼标定矩阵计算相关参数
+    bool is_quaternion;
+
     std::vector<cv::Mat> R_gripper2base;
     std::vector<cv::Mat> t_gripper2base;
     std::vector<cv::Mat> R_base2gripper;
@@ -29,7 +56,7 @@ public:
     std::vector<cv::Mat> t_target2cam;
     std::vector<cv::Mat> vecH_gripper2base, vecH_target2cam, vecH_base2gripper;
 
-    //手眼标定结果
+    // 手眼标定结果
     cv::Mat R_cam2gripper;
     cv::Mat t_cam2gripper;
     cv::Mat R_cam2base;
@@ -37,48 +64,40 @@ public:
     cv::Mat H_cam2gripper;
     cv::Mat H_cam2base;
 
-    // config文件读取的数据
+    // 从文件中读取的数据
+
     // 相机中标定板的位姿，x,y,z，rx,ry,rz,
-    cv::Mat_<double> CalPose;
-    // 机械臂末端位姿
-    cv::Mat_<double> ToolPose;
-    // 存储图片的数量
-    size_t num_images;
-
-    // 是否使用四元数
-    bool is_quaternion;
-
-    // 是否是使用图片进行手眼标定
-    bool is_picture;
-
-    int hand_eye_calib(const std::string &INI_dir, int calib_type);
-    int result_test(int calib_type);
+    cv::Mat CalPose;
+    // 机械臂末端位姿 x y z w x y z
+    cv::Mat ToolPose;
 
 private:
 
-    void get_data(const std::string &INI_dir);
+    /**
+     * @brief 读取json文件
+     * @param json_path json文件的路径
+     */
+    void get_calib_config_data(const std::string &json_path);
 
-    void reform_data_hand_in_eye();
+    /**
+     * @brief 把数据格数转换为手眼标定需要的格式
+     */
+    void reform_hand_eye_data();
 
-    void reform_data_hand_to_eye();
+    /**
+     * @brief 从文件里读取手眼标定需要的数据
+     * @return 0:成功 else:失败
+     */
+    int get_hand_eye_data();
 
-    std::string get_INI_data(const std::string &path,
-                             const std::string &root,
-                             const std::string &key);
-
+    /**
+     * @brief 读取txt文件中的位姿数据并转换成vector
+     * @return vector数据
+     */
     std::vector<double> get_TXT_data(const std::string &path);
 
-    /*!
-     * @brief 从标定板图片中获得计算pnp获取位姿信息
-     * @tparam _Tp
-     * @param mat
-     * @return
-     */
-    std::vector<double> get_cal_pnp_data(const std::string &path);
-
-
-    /*!
-     * @brief mat转vector
+    /**
+     * @brief cv::mat转vector
      * @tparam _Tp
      * @param mat
      * @return
@@ -86,16 +105,17 @@ private:
     template<typename Tp>
     std::vector<Tp> convertMat2Vector(const cv::Mat &mat);
 
-    /*!
-     * @brief vector转mat
-     * @tparam _Tp
-     * @param v
-     * @param channels
-     * @param rows
+    /**
+     * @brief vector转cv::mat
+     * @param v vector
+     * @param channels 通道数
+     * @param rows 行数
      * @return
      */
     template<typename Tp>
     cv::Mat convertVector2Mat(const std::vector<Tp> v, const int channels, const int rows);
+
+    
 };
 
 

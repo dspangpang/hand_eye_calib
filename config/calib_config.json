@@ -1,0 +1,10 @@
+{
+    "calibrationMethod": "EYE_IN_HAND",
+    "imagesNum": 16,
+    "dataDectory": "data",
+    "armPoseFormat": "quaternion",
+    "calPoseDataFile": "calPoseData.txt",
+    "gripperPoseDataFile": "gripperPoseData.txt",
+    "usePicture": false,
+    "imageDataDectory": "img"
+}
