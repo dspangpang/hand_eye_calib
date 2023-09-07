@@ -1,6 +1,2 @@
-*.idea
-*.clion.source.upload.marker
-*cmake*
-*.uuid
 *.vscode
-*.txt
+config/data/*.txt*
