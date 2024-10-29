@@ -1,0 +1,10 @@
+{
+    "const_scale": "mm",
+    "visulation": false,
+    "imagesNum": 17,
+    "image_1_dir": "/root/work_place/hand_eye_calib_ws/src/hand_eye_calib/config/data/binocular/img1",
+    "image_2_dir": "/root/work_place/hand_eye_calib_ws/src/hand_eye_calib/config/data/binocular/img2",
+    "board_squre_num_x": 11,
+    "board_squre_num_y": 8,
+    "square_size": 30
+}

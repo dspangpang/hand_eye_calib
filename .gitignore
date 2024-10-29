@@ -1,2 +1,4 @@
 *.vscode
-config/data/*.txt*
+*.txt
+*.bmp
+!CMakeLists.txt

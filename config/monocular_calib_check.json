@@ -1,0 +1,9 @@
+{
+    "const_scale": "mm",
+    "visulation": false,
+    "imagesNum": 17,
+    "image_dir": "/root/work_place/hand_eye_calib_ws/src/hand_eye_calib/config/data/gray",
+    "board_squre_num_x": 11,
+    "board_squre_num_y": 8,
+    "square_size": 30
+}

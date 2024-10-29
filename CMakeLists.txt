@@ -153,6 +153,14 @@ add_executable(pub_hand_eye_frame_node
         nodes/pub_hand_eye_frame_node.cpp
         src/jsonParser.cpp)
 
+add_executable(monocular_calib_node
+        nodes/monocular_calib_node.cpp
+        src/MonocularCalib.cpp)
+
+add_executable(binocular_calib_node
+        nodes/binocular_calib_node.cpp
+        src/BinocularCalib.cpp)
+
         
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -176,6 +184,17 @@ target_link_libraries(pub_hand_eye_frame_node
         ${OpenCV_LIBRARIES}
         jsoncpp_lib
         )
+target_link_libraries(monocular_calib_node
+        ${catkin_LIBRARIES}
+        ${OpenCV_LIBRARIES}
+        jsoncpp_lib
+        )
+target_link_libraries(binocular_calib_node
+        ${catkin_LIBRARIES}
+        ${OpenCV_LIBRARIES}
+        jsoncpp_lib
+        )
+
 
 #############
 ## Install ##

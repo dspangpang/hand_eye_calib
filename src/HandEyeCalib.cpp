@@ -1,12 +1,8 @@
-//
-// Created by jzz on 23-2-8.
-//
-
 #include "../include/hand_eye_calib/HandEyeCalib.h"
 
 HandEyeCalib::HandEyeCalib(const std::string &config_path) {
     this->config_path = config_path;
-    this->jsonPath = config_path + "/calib_config.json";
+    this->jsonPath = config_path + "/hand_eye_calib.json";
     std::cout << "jsonPath : " << jsonPath << std::endl;
     get_calib_config_data(jsonPath);
 }
